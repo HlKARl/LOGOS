@@ -73,3 +73,12 @@ Puedes abrir este HTML directamente para jugar sin conexión. Incluye preguntas,
 - Sin APIs de terceros para el juego; después de la primera carga de GitHub Pages, la PWA funciona sin internet.
 
 **Privacidad:** la música que importas del dispositivo queda almacenada localmente. Las canciones que subes a GitHub en un repositorio público se vuelven accesibles a otros; comparte solo música que puedas publicar legalmente.
+
+## LOGOS 3.1 — Respuestas de dos toques
+
+- Primero toca una alternativa para seleccionarla: queda destacada, pero no se valida.
+- Si quieres cambiarla, toca otra opción; esa pasa a ser la seleccionada.
+- Vuelve a tocar **la misma alternativa** para confirmar la respuesta definitivamente.
+- Tras revelar el resultado, usa **Siguiente / Ver resultado** junto al mensaje para continuar.
+- El botón anterior de confirmar fue eliminado y se ajustaron los márgenes del juego para que los controles no queden fuera de la pantalla.
+- Al actualizar GitHub Pages, sustituye los archivos existentes. Se renovó la caché offline a `logos-offline-v3.1.0`.
