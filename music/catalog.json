@@ -1,7 +1,18 @@
 {
-  "inicio": [],
-  "suave": [],
-  "media": [],
-  "intensa": [],
-  "victoria": []
+  "inicio": [
+    "inicio/Logos - Inicio.mp3"
+  ],
+  "suave": [
+    "juego/suave/Logos - Facil.mp3"
+  ],
+  "media": [
+    "juego/media/Logos - Medio.mp3"
+  ],
+  "intensa": [
+    "juego/intensa/Logos - Intensa.mp3"
+  ],
+  "victoria": [
+    "victoria/Victoria - Mario Bross.mp3"
+  ],
+  "derrota": []
 }

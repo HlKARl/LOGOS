@@ -1,12 +1,13 @@
 /* LOGOS 2.0 — Music manager. No third-party services or CDNs. */
 (()=>{
 'use strict';
-const PHASES=['inicio','suave','media','intensa','victoria'];
+const PHASES=['inicio','suave','media','intensa','victoria','derrota'];
 const AUDIO_EXT=/\.(mp3|m4a|aac|ogg|opus|wav|flac|webm)$/i;
 const DB='logos-musica-v2',STORE='pistas';
 const pick=(arr)=>arr[Math.floor(Math.random()*arr.length)];
 function phaseOfPath(p){
  const path='/'+p.toLowerCase().replace(/\\/g,'/').normalize('NFD').replace(/[\u0300-\u036f]/g,'')+'/';
+ if(/\/(derrota|perdida|perder|gameover)\//.test(path))return 'derrota';
  if(/\/(victoria|ganador|final-victoria)\//.test(path))return 'victoria';
  if(/\/(inicio|menu|portada|home)\//.test(path))return 'inicio';
  if(/\/(intensa|intenso|dificil|11-15|nivel3|alta)\//.test(path))return 'intensa';
@@ -31,7 +32,7 @@ function create(settings,onChange=()=>{}){
  const loadedTracks=()=>settings.musicSource==='github'?catalog:local;
  function choices(){const all=loadedTracks(),needed=stage();let chosen=all.filter(x=>x.phase===needed);
   if(!chosen.length&&settings.musicSource==='local')chosen=all.filter(x=>x.phase==='general');
-  if(!chosen.length&&settings.musicSource==='local')chosen=all.filter(x=>x.phase!=='victoria'&&x.phase!=='inicio');
+  if(!chosen.length&&settings.musicSource==='local')chosen=all.filter(x=>x.phase!=='victoria'&&x.phase!=='derrota'&&x.phase!=='inicio');
   if(!chosen.length&&settings.musicSource==='github')chosen=all.filter(x=>x.phase==='general');
   return chosen;
  }
@@ -46,7 +47,7 @@ function create(settings,onChange=()=>{}){
   if(danger||middle){const beat=ctx.createOscillator(),gain=ctx.createGain();beat.type='sine';beat.frequency.setValueAtTime(danger?92:82,now);gain.gain.setValueAtTime(.0001,now);gain.gain.exponentialRampToValueAtTime(danger?.09:.043,now+.012);gain.gain.exponentialRampToValueAtTime(.0001,now+.26);beat.connect(gain).connect(master);beat.start(now);beat.stop(now+.28)}
   setTimeout(()=>{try{master.disconnect()}catch{}},5000);
  }
- function startAmbient(){fadeCancel();audio.pause();stopTicker();usingAmbient=true;nowPlaying='Instrumental LOGOS · '+({inicio:'Inicio',suave:'Sereno',media:'Expectativa',intensa:'Máxima tensión',victoria:'Victoria'}[stage()]||'');currentKey='ambient:'+stage();ambientCounter=0;setPlaying(true);playChords();ambientTick=setInterval(playChords,stage()==='intensa'?2500:stage()==='media'?3050:3750)}
+ function startAmbient(){fadeCancel();audio.pause();stopTicker();usingAmbient=true;nowPlaying='Instrumental LOGOS · '+({inicio:'Inicio',suave:'Sereno',media:'Expectativa',intensa:'Máxima tensión',victoria:'Victoria',derrota:'Derrota'}[stage()]||'');currentKey='ambient:'+stage();ambientCounter=0;setPlaying(true);playChords();ambientTick=setInterval(playChords,stage()==='intensa'?2500:stage()==='media'?3050:3750)}
  function stopPlayback(){changeToken++;fadeCancel();stopTicker();audio.pause();usingAmbient=false;if(objectUrl){URL.revokeObjectURL(objectUrl);objectUrl=null}currentKey='';nowPlaying='';setPlaying(false)}
  async function playTrack(track,token){if(token!==changeToken)return;
   usingAmbient=false;stopTicker();fadeCancel();audio.pause();
@@ -67,7 +68,7 @@ function create(settings,onChange=()=>{}){
  function stop(){stopPlayback()}
  function toggle(){if(playing)stop();else start()}
  function skip(){if(!playing){start();return}if(settings.musicSource==='ambient'){startAmbient();return}next(true)}
- function setScene(view,round=1,won=false){const old=stage();scene=view==='game'?'game':view==='result'&&won?'victoria':'inicio';phaseName=round<=5?'suave':round<=10?'media':'intensa';if(old!==stage()&&playing){if(settings.musicSource==='ambient')startAmbient();else next(true)}else notify()}
+ function setScene(view,round=1,won=false,reason=''){const old=stage();scene=view==='game'?'game':view==='result'?(won?'victoria':reason==='retire'?'inicio':'derrota'):'inicio';phaseName=round<=5?'suave':round<=10?'media':'intensa';if(old!==stage()&&playing){if(settings.musicSource==='ambient')startAmbient();else next(true)}else notify()}
  function setSource(value){if(!['ambient','local','github'].includes(value))value='ambient';settings.musicSource=value; if(playing){stopPlayback();start()}else notify()}
  function setVolume(){audio.volume=volume();notify()}
  async function importFiles(files,assignTo='auto'){const rows=[];for(const file of Array.from(files||[])){

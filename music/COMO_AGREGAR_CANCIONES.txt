@@ -1,34 +1,19 @@
-MUSICA DE LOGOS - CARPETAS PARA GITHUB
+LOGOS 3.2 — MÚSICA EN GITHUB
 
-1. Sube los archivos de audio a las carpetas:
-   inicio/              (pantalla inicial)
-   juego/suave/        (preguntas 1-5)
-   juego/media/        (preguntas 6-10)
-   juego/intensa/      (preguntas 11-15)
-   victoria/           (al ganar el concurso)
+El catálogo ya viene configurado para los nombres que enviaste:
 
-2. Abre 'catalog.json' en GitHub y agrega los nombres EXACTOS de las canciones,
-   incluyendo las rutas. Ejemplo (si has subido esos archivos):
+ music/inicio/Logos - Inicio.mp3
+ music/juego/suave/Logos - Facil.mp3
+ music/juego/media/Logos - Medio.mp3
+ music/juego/intensa/Logos - Intensa.mp3
+ music/victoria/Victoria - Mario Bross.mp3
 
-{
-  "inicio": ["inicio/ambientacion.mp3"],
-  "suave": ["juego/suave/calidez.mp3", "juego/suave/paz.ogg"],
-  "media": ["juego/media/expectativa.mp3"],
-  "intensa": ["juego/intensa/tension.mp3"],
-  "victoria": ["victoria/celebracion.mp3"]
-}
+NUEVA CARPETA: music/derrota/ (música al perder o agotarse el tiempo).
 
-3. Guarda los cambios, actualiza LOGOS, activa GitHub como fuente musical.
-   LOGOS elegira al azar entre las canciones de la etapa correspondiente.
+1. Copia tus MP3 a esas carpetas, respetando exactamente espacios y mayúsculas.
+2. Si agregas varias canciones o una nueva canción para derrota, edita music/catalog.json y añade la ruta a la lista correspondiente. Ejemplo: "derrota": ["derrota/Mi derrota.mp3"].
+3. Sube todo a GitHub Pages. Activa fuente GitHub en CONFIGURACIÓN > MÚSICA.
+4. Pulsa DESCARGAR PARA JUGAR OFFLINE mientras estés conectado.
 
-4. Para escucharlas sin internet desde el primer juego sin conexion, abre
-   Configuracion > DESCARGAR TODA LA MUSICA DE GITHUB (solo una vez conectado).
-   Si cambias archivos, vuelve a descargar y puedes limpiar datos del sitio.
-
-Nota: GitHub Pages es un alojamiento ESTATICO: no permite descubrir nombres
-nuevos de archivos en carpetas. Por eso hay que enumerarlos en catalog.json.
-Los nombres y las tildes deben coincidir exactamente. Recomendamos nombres sin
-espacios ni tildes.
-
-Puedes subir musica que tengas derecho a utilizar. Las canciones de GitHub son
-accesibles para cualquiera que tenga el enlace al repositorio publico.
+El ZIP no contiene los MP3, solo las carpetas y sus referencias.
+Los MP3 publicados en un repositorio público quedan accesibles a terceros; sube únicamente archivos cuya distribución esté autorizada.

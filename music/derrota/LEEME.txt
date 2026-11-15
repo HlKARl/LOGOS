@@ -1,0 +1,1 @@
+Coloca aquí las canciones que se escucharán al perder y añade sus nombres a music/catalog.json en la clave "derrota".
