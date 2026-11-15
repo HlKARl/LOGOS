@@ -4,6 +4,13 @@
 const PHASES=['inicio','suave','media','intensa','victoria','derrota'];
 const AUDIO_EXT=/\.(mp3|m4a|aac|ogg|opus|wav|flac|webm)$/i;
 const DB='logos-musica-v2',STORE='pistas';
+// La banda sonora base es fija y no depende de cambios futuros en catalog.json.
+const DEFAULT_PATHS={
+ inicio:'base/Logos - Inicio.mp3',suave:'base/Logos - Facil.mp3',
+ media:'base/Logos - Medio.mp3',intensa:'base/Logos - Intensa.mp3',
+ victoria:'base/Victoria - Mario Bross.mp3',derrota:'base/Game over.mp3'
+};
+const DEFAULT_TRACKS=Object.entries(DEFAULT_PATHS).map(([phase,path])=>({phase,path,name:path.split('/').pop(),url:new URL('music/'+path,document.baseURI).href}));
 const pick=(arr)=>arr[Math.floor(Math.random()*arr.length)];
 function phaseOfPath(p){
  const path='/'+p.toLowerCase().replace(/\\/g,'/').normalize('NFD').replace(/[\u0300-\u036f]/g,'')+'/';
@@ -29,7 +36,7 @@ function create(settings,onChange=()=>{}){
  const notify=()=>{try{onChange({playing,nowPlaying,scene,source:settings.musicSource,localCount:local.length,githubCount:catalog.length,offlineCount,usingAmbient})}catch{}};
  const contextGet=()=>{try{context??=new (window.AudioContext||window.webkitAudioContext)();if(context.state==='suspended')context.resume().catch(()=>{});return context}catch{return null}};
  const stage=()=>scene==='game'?phaseName:scene;
- const loadedTracks=()=>settings.musicSource==='github'?catalog:local;
+ const loadedTracks=()=>settings.musicSource==='default'?DEFAULT_TRACKS:settings.musicSource==='github'?catalog:local;
  function choices(){const all=loadedTracks(),needed=stage();let chosen=all.filter(x=>x.phase===needed);
   if(!chosen.length&&settings.musicSource==='local')chosen=all.filter(x=>x.phase==='general');
   if(!chosen.length&&settings.musicSource==='local')chosen=all.filter(x=>x.phase!=='victoria'&&x.phase!=='derrota'&&x.phase!=='inicio');
@@ -69,7 +76,7 @@ function create(settings,onChange=()=>{}){
  function toggle(){if(playing)stop();else start()}
  function skip(){if(!playing){start();return}if(settings.musicSource==='ambient'){startAmbient();return}next(true)}
  function setScene(view,round=1,won=false,reason=''){const old=stage();scene=view==='game'?'game':view==='result'?(won?'victoria':reason==='retire'?'inicio':'derrota'):'inicio';phaseName=round<=5?'suave':round<=10?'media':'intensa';if(old!==stage()&&playing){if(settings.musicSource==='ambient')startAmbient();else next(true)}else notify()}
- function setSource(value){if(!['ambient','local','github'].includes(value))value='ambient';settings.musicSource=value; if(playing){stopPlayback();start()}else notify()}
+ function setSource(value){if(!['default','ambient','local','github'].includes(value))value='default';settings.musicSource=value; if(playing){stopPlayback();start()}else notify()}
  function setVolume(){audio.volume=volume();notify()}
  async function importFiles(files,assignTo='auto'){const rows=[];for(const file of Array.from(files||[])){
   if(!file||!((file.type||'').startsWith('audio/')||AUDIO_EXT.test(file.name)))continue;
@@ -99,7 +106,21 @@ function create(settings,onChange=()=>{}){
   await offlineStatus();return {ok,failed,total};
  }
  async function migrateLegacy(){try{const r=indexedDB.open('logos-audio-v1',1);const old=await new Promise(resolve=>{r.onsuccess=()=>resolve(r.result);r.onerror=()=>resolve(null);r.onupgradeneeded=()=>resolve(null)});if(!old||!old.objectStoreNames.contains('songs'))return;const item=await new Promise(resolve=>{const req=old.transaction('songs','readonly').objectStore('songs').get('current');req.onsuccess=()=>resolve(req.result);req.onerror=()=>resolve(null)});old.close();if(item?.file&&local.length===0){await insert([{path:'general/'+item.file.name,name:item.file.name,phase:'general',file:item.file,size:item.file.size||0}]);local=await rowsFromStorage()}}catch{}}
- async function init(){if(initialized)return;initialized=true;local=await rowsFromStorage();await migrateLegacy();await reloadCatalog();await offlineStatus();notify()}
+ async function cacheDefaultTracks(){
+  if(!('caches' in window)||location.protocol==='file:')return;
+  try{
+   const cache=await caches.open('logos-music-v2');
+   for(const track of DEFAULT_TRACKS){
+    try{
+     const req=new Request(track.url);if(await cache.match(req))continue;
+     const res=await fetch(req);if(res.ok&&res.headers.get('content-type')?.toLowerCase().includes('audio'))await cache.put(req,res.clone());
+     else if(res.ok&&!res.headers.get('content-type')?.includes('text/html'))await cache.put(req,res.clone());
+    }catch{} // No interrumpir el concurso cuando un MP3 aún no existe.
+   }
+   await offlineStatus();
+  }catch{}
+ }
+ async function init(){if(initialized)return;initialized=true;local=await rowsFromStorage();await migrateLegacy();await reloadCatalog();await offlineStatus();notify();void cacheDefaultTracks()}
  audio.addEventListener('ended',()=>{if(playing&&!usingAmbient)next(true)});
  audio.addEventListener('error',()=>{if(playing&&!usingAmbient)startAmbient()});
  return {init,toggle,start,stop,skip,setScene,setSource,setVolume,importFiles,clearLocal,reloadCatalog,downloadAll,offlineStatus,getState:()=>({playing,nowPlaying,scene,source:settings.musicSource,localCount:local.length,githubCount:catalog.length,offlineCount,usingAmbient})};

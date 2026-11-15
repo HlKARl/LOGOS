@@ -1,5 +1,5 @@
 // LOGOS 3.0: independent caches for application shell and user-selected soundtrack.
-const SHELL='logos-offline-v3.2.0';
+const SHELL='logos-offline-v3.4.0';
 const MUSIC='logos-music-v2';
 const FILES=['./','./index.html','./styles.css','./app.js','./music.js','./questions.js','./manifest.webmanifest','./music/catalog.json','./icons/logos.svg','./icons/logos-192.png','./icons/logos-512.png'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(SHELL).then(c=>c.addAll(FILES)).then(()=>self.skipWaiting()))});

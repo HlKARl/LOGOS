@@ -8,7 +8,7 @@ const QUESTIONS=Array.isArray(window.LOGOS_QUESTIONS)?window.LOGOS_QUESTIONS:[];
 const byId=new Map(QUESTIONS.map(q=>[q.id,q]));
 const KEY='logos.game.v1',SETTINGS_KEY='logos.settings.v1',RECORD_KEY='logos.records.v1',RECENT_KEY='logos.recent.v1';
 const MODES={facil:{label:'FÁCIL',time:0,lifelines:true,description:'Sin límite de tiempo'},medio:{label:'MEDIO',time:30,lifelines:true,description:'30 segundos por pregunta'},dificil:{label:'DIFÍCIL',time:15,lifelines:true,description:'15 segundos por pregunta'},sagrado:{label:'SAGRADO',time:15,lifelines:false,description:'15 segundos · Sin comodines'}};
-const basicSettings={difficulty:'facil',sfx:true,musicVolume:35,musicSource:'ambient'};
+const basicSettings={difficulty:'facil',sfx:true,musicVolume:35,musicSource:'default'};
 function fromStorage(key,otherwise){try{const value=localStorage.getItem(key);return value?JSON.parse(value):otherwise}catch{return otherwise}}
 function putStorage(key,value){try{localStorage.setItem(key,JSON.stringify(value));return true}catch{return false}}
 function clean(str){return String(str||'').replace(/[&<>"']/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[x]))}
@@ -20,6 +20,7 @@ if(!MODES[settings.difficulty])settings.difficulty=settings.timer===30?'medio':s
 let game=validateGame(fromStorage(KEY,null));
 let view='home',modalOpen=false,pendingResolve=false,timeInterval=null,soundContext=null,toastTimeout=null,modalReturnFocus=null;
 if(settings.musicSource==='archivo')settings.musicSource='local';
+if(settings.musicSource==='ambient')settings.musicSource='default';
 const music=window.LogosMusic.create(settings,updateMusicButton);
 const audioApi={get ctx(){if(!soundContext){try{soundContext=new (window.AudioContext||window.webkitAudioContext)()}catch{}}if(soundContext&&soundContext.state==='suspended')soundContext.resume().catch(()=>{});return soundContext}};
 function validateGame(g){if(!g||!Number.isInteger(g.round)||g.round<1||g.round>15||!g.q||!byId.has(g.q.id)||!Array.isArray(g.q.order)||g.q.order.length!==4)return null;if(!MODES[g.mode])g.mode=g.timerSeconds===30?'medio':g.timerSeconds===15?'dificil':'facil';if(!Number.isFinite(g.timerSeconds))g.timerSeconds=MODES[g.mode].time;return g}
@@ -139,12 +140,12 @@ function settingsModal(){
    $('sfxToggle').addEventListener('change',e=>{settings.sfx=e.target.checked;saveSettings();if(settings.sfx)sound('select')});
   }else{
    const st=music.getState();pane.innerHTML=`<div class="settings-section-title">BANDA SONORA <span>AMBIENTE DINÁMICO</span></div>
-    <div class="source-choices"><label class="source-option ${settings.musicSource==='ambient'?'picked':''}"><input type="radio" name="musicSource" value="ambient" ${settings.musicSource==='ambient'?'checked':''}><span>✧</span> Instrumental</label><label class="source-option ${settings.musicSource==='local'?'picked':''}"><input type="radio" name="musicSource" value="local" ${settings.musicSource==='local'?'checked':''}><span>♫</span> Mi dispositivo</label><label class="source-option ${settings.musicSource==='github'?'picked':''}"><input type="radio" name="musicSource" value="github" ${settings.musicSource==='github'?'checked':''}><span>☁</span> GitHub</label></div>
+    <div class="source-choices"><label class="source-option ${settings.musicSource==='default'?'picked':''}"><input type="radio" name="musicSource" value="default" ${settings.musicSource==='default'?'checked':''}><span>✧</span> Mis 6 canciones · Por defecto</label><label class="source-option ${settings.musicSource==='local'?'picked':''}"><input type="radio" name="musicSource" value="local" ${settings.musicSource==='local'?'checked':''}><span>♫</span> Mi dispositivo</label><label class="source-option ${settings.musicSource==='github'?'picked':''}"><input type="radio" name="musicSource" value="github" ${settings.musicSource==='github'?'checked':''}><span>☁</span> GitHub</label></div>
     <div class="audio-bar"><span>VOLUMEN</span><input id="volumeRange" type="range" min="0" max="100" value="${settings.musicVolume}" aria-label="Volumen musical"><span id="volumeVal">${settings.musicVolume}%</span></div>
     <div class="audio-current"><span class="audio-playing" id="playingNow">♫ ${clean(st.nowPlaying||'Música pausada')}</span><button id="nextSongBtn" class="small-skip" type="button" aria-label="Siguiente canción">⏭</button></div>
     <div class="music-source-panel" id="localMusicPane" ${settings.musicSource!=='local'?'hidden':''}><p class="settings-tip">Importa una carpeta o varias canciones; se guardan en este dispositivo para escuchar sin internet.</p><div class="settings-line"><label for="localPhase">REPRODUCIR EN</label><select id="localPhase"><option value="auto">Todas las etapas / Según carpetas</option><option value="inicio">Inicio</option><option value="suave">Rondas 1–5</option><option value="media">Rondas 6–10</option><option value="intensa">Rondas 11–15</option><option value="victoria">Victoria</option><option value="derrota">Derrota</option></select></div><div class="import-actions"><label class="file-button" for="folderSongs">+ CARPETA</label><input id="folderSongs" type="file" accept="audio/*" webkitdirectory directory multiple hidden><label class="file-button" for="multipleSongs">+ CANCIONES</label><input id="multipleSongs" type="file" accept="audio/*,.mp3,.ogg,.wav,.m4a,.aac,.flac" multiple hidden></div><div class="library-footer"><span id="localMusicStatus">${st.localCount} canciones guardadas</span><button id="clearSongsBtn" class="subtle-action" type="button">BORRAR</button></div><p class="settings-tip">Si tu navegador no permite importar carpetas, elige varias canciones.</p></div>
-    <div class="music-source-panel" id="githubMusicPane" ${settings.musicSource!=='github'?'hidden':''}><p class="settings-tip">Añade archivos a <code>music/</code> en tu repositorio y sus rutas a <code>music/catalog.json</code>. Las listas cambian entre inicio, rondas 1–5, 6–10, 11–15, victoria y derrota.</p><div class="library-footer"><span id="githubMusicStatus">${st.githubCount} pistas · ${st.offlineCount} sin conexión</span></div><button id="downloadMusicBtn" class="file-button wide-download" type="button">↓ DESCARGAR PARA JUGAR OFFLINE</button></div>
-    <p class="settings-tip audio-last">La música cambia de intensidad según la etapa. Para reproducirla, pulsa el icono musical de la barra superior.</p>`;
+    <div class="music-source-panel" id="githubMusicPane" ${settings.musicSource!=='github'?'hidden':''}><p class="settings-tip">El catálogo inicial contiene tus seis canciones. Para añadir variedad, edita <code>music/catalog.json</code> y sube nuevas canciones a <code>music/</code>. Las listas cambian entre inicio, rondas 1–5, 6–10, 11–15, victoria y derrota.</p><div class="library-footer"><span id="githubMusicStatus">${st.githubCount} pistas · ${st.offlineCount} sin conexión</span></div><button id="downloadMusicBtn" class="file-button wide-download" type="button">↓ DESCARGAR PARA JUGAR OFFLINE</button></div>
+    <p class="settings-tip audio-last">Las 6 canciones de LOGOS se reproducen por defecto desde music/base/. Al cambiar el catálogo de GitHub, estas canciones seguirán siendo las mismas. Requieren que subas tus MP3 al repositorio.</p>`;
    const refresh=()=>{const a=music.getState();if($('localMusicStatus'))$('localMusicStatus').textContent=a.localCount+' canciones guardadas';if($('githubMusicStatus'))$('githubMusicStatus').textContent=`${a.githubCount} pistas · ${a.offlineCount} descargadas`;if($('playingNow'))$('playingNow').textContent='♫ '+(a.nowPlaying||'Música pausada')};
    pane.querySelectorAll('input[name="musicSource"]').forEach(radio=>radio.addEventListener('change',e=>{music.setSource(e.target.value);saveSettings();pane.querySelectorAll('.source-option').forEach(el=>el.classList.toggle('picked',el.querySelector('input').checked));$('localMusicPane').hidden=e.target.value!=='local';$('githubMusicPane').hidden=e.target.value!=='github';refresh()}));
    $('volumeRange').addEventListener('input',e=>{settings.musicVolume=Number(e.target.value);$('volumeVal').textContent=settings.musicVolume+'%';saveSettings();music.setVolume()});
@@ -179,6 +180,26 @@ function bind(){
  }
  const badge=$('offlineBadge');if(location.protocol==='file:'){badge.classList.add('not-installed');$('connectionText').textContent='MODO LOCAL · OFFLINE'}
 }
-function init(){if(!QUESTIONS.length||QUESTIONS.length!==660){$('homeHeading').textContent='Error al cargar preguntas';$('startBtn').disabled=true;return}bind();void music.init();updateMusicButton();showHome();}
+function armDefaultSoundtrack(){
+ // Los navegadores solo permiten iniciar sonido tras una interacción del usuario.
+ // Si el usuario pulsa el botón de música primero, respetamos esa decisión.
+ let armed=true;
+ const startAfterGesture=(event)=>{
+  if(!armed)return;
+  if(event.type==='keydown'&&(event.repeat||!['Enter',' ','Spacebar'].includes(event.key)))return;
+  if(event.target?.closest?.('#musicBtn,#nextTrackBtn')){
+   armed=false;unhook();return;
+  }
+  armed=false;unhook();
+  if(!music.getState().playing)music.start();
+ };
+ const unhook=()=>{
+  document.removeEventListener('pointerdown',startAfterGesture,true);
+  document.removeEventListener('keydown',startAfterGesture,true);
+ };
+ document.addEventListener('pointerdown',startAfterGesture,true);
+ document.addEventListener('keydown',startAfterGesture,true);
+}
+function init(){if(!QUESTIONS.length||QUESTIONS.length!==660){$('homeHeading').textContent='Error al cargar preguntas';$('startBtn').disabled=true;return}bind();void music.init();updateMusicButton();showHome();armDefaultSoundtrack();}
 init();
 })();

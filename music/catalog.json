@@ -1,20 +1,20 @@
 {
   "inicio": [
-    "inicio/Logos - Inicio.mp3"
+    "base/Logos - Inicio.mp3"
   ],
   "suave": [
-    "juego/suave/Logos - Facil.mp3"
+    "base/Logos - Facil.mp3"
   ],
   "media": [
-    "juego/media/Logos - Medio.mp3"
+    "base/Logos - Medio.mp3"
   ],
   "intensa": [
-    "juego/intensa/Logos - Intensa.mp3"
+    "base/Logos - Intensa.mp3"
   ],
   "victoria": [
-    "victoria/Victoria - Mario Bross.mp3"
+    "base/Victoria - Mario Bross.mp3"
   ],
   "derrota": [
-    "derrota/Game over.mp3"
+    "base/Game over.mp3"
   ]
 }
