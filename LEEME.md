@@ -1,26 +1,43 @@
-# LOGOS 3.4 — Tus seis canciones por defecto
+# LOGOS 3.5 — Música predeterminada y actualización sin borrar datos
 
-La app mantiene **exactamente** las funciones y la interfaz de LOGOS 3.3. La única actualización es la banda sonora:
+Esta actualización conserva las 660 preguntas, el diseño, los modos, las partidas y resultados guardados,
+la opción de importar música del celular y la biblioteca opcional de GitHub.
 
-- **Por defecto**: usa siempre las seis canciones especificadas, una por etapa, en `music/base/`.
-- **GitHub**: `music/catalog.json` empieza con esas **mismas seis** canciones. Podrás cambiarlo después para agregar variedades sin alterar la lista fija por defecto.
-- **Mi dispositivo**: permite importar carpetas o canciones desde el teléfono, igual que antes.
-- **Sin conexión**: en GitHub Pages, las seis canciones se intentan guardar automáticamente en la caché durante la primera visita con internet. El botón «Descargar para jugar offline» continúa disponible en la fuente GitHub.
-- Si falta algún MP3, la aplicación usa su instrumental de respaldo para esa etapa y no deja de funcionar.
+## Qué se corrigió
 
-## Archivos que debes aportar
+- El navegador consulta versiones recientes de HTML, JS y CSS al volver a abrir LOGOS con internet.
+- Se renueva el Service Worker v3.5, conservando cachés de canciones y datos de partidas.
+- Los MP3 servidos por peticiones parciales (HTTP Range / 206) se reproducen con normalidad.
+- Si se habían descargado los MP3 completos, pueden servirse sin conexión con respuesta parcial correcta.
+- La música comienza **tras la primera interacción del usuario** por la política de navegadores.
+- Si un MP3 no puede abrirse, se notifica el error y sigue el instrumental de respaldo.
 
-**No estaban adjuntos los MP3 reales**, así que este ZIP no puede incluir su sonido. Debes subir estos seis archivos a `music/base/` con exactamente estos nombres:
+## Actualizar GitHub Pages
 
-1. `Logos - Inicio.mp3`
-2. `Logos - Facil.mp3`
-3. `Logos - Medio.mp3`
-4. `Logos - Intensa.mp3`
-5. `Victoria - Mario Bross.mp3`
-6. `Game over.mp3`
+1. Descomprime `LOGOS_3_5_GitHub.zip` y sube **los archivos de dentro** a la raíz de tu repositorio LOGOS,
+   reemplazando los existentes. No borres la carpeta `music/base/` que ya tienes en GitHub.
+2. Mantén los seis MP3 en `music/base/` con estos nombres exactos:
+   - `Logos - Inicio.mp3`
+   - `Logos - Facil.mp3`
+   - `Logos - Medio.mp3`
+   - `Logos - Intensa.mp3`
+   - `Victoria - Mario Bross.mp3`
+   - `Game over.mp3`
+3. Una vez publicada la actualización, **usuarios que aún vean LOGOS 3.4** pueden abrir una sola vez
+   la URL de LOGOS con `?actualizar=3.5` al final (por ejemplo,
+   `https://USUARIO.github.io/LOGOS/?actualizar=3.5`); después pueden abrir la URL habitual.
+   Esto evita la versión de HTML guardada por el Service Worker antiguo.
+4. No selecciones «Borrar datos del sitio»: eso sí eliminaría partidas, récords y preferencias.
 
-La música predeterminada se sirve desde los archivos de tu repositorio, no desde el generador de música integrada. Hasta subirlos escucharás el sonido de respaldo. La reproducción con sonido requiere una interacción inicial, por las reglas del navegador.
+## Música de GitHub
 
-Al actualizar GitHub Pages, sube todo el contenido de este ZIP y conserva tus archivos de música propios. Si ya tienes un `music/catalog.json` modificado y quieres conservarlo, decide si prefieres el nuevo catálogo inicial o el tuyo.
+El catálogo descargable sigue en `music/catalog.json`; las canciones de `base/` son independientes.
+Puedes añadir pistas en las subcarpetas `music/inicio/`, `music/juego/suave/`,
+`music/juego/media/`, `music/juego/intensa/`, `music/victoria/` y `music/derrota/`,
+y añadir su ruta relativa al catálogo. La opción «Mi dispositivo» no se ha modificado.
 
-Los MP3 de obras comerciales están protegidos por derechos de autor; para distribuirlos públicamente desde GitHub se requieren permisos adecuados.
+**Importante:** este ZIP NO incluye los seis MP3 reales (no se habían adjuntado). La web usará
+los que ya subiste al repositorio. Para escuchar las canciones offline, deberán descargarse
+correctamente una primera vez con internet y disponer de espacio de almacenamiento.
+
+Al publicar canciones comerciales necesitas los permisos pertinentes.

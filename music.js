@@ -29,8 +29,8 @@ function openDb(){return new Promise((resolve,reject)=>{
 async function rows(){const db=await openDb();return new Promise((resolve,reject)=>{const req=db.transaction(STORE,'readonly').objectStore(STORE).getAll();req.onsuccess=()=>{db.close();resolve(req.result||[])};req.onerror=()=>{db.close();reject(req.error)}})}
 async function insert(rows){const db=await openDb();return new Promise((resolve,reject)=>{const t=db.transaction(STORE,'readwrite');for(const row of rows)t.objectStore(STORE).put(row);t.oncomplete=()=>{db.close();resolve()};t.onerror=()=>{db.close();reject(t.error||Error('Sin espacio'))}})}
 async function deleteAll(){const db=await openDb();return new Promise((resolve,reject)=>{const t=db.transaction(STORE,'readwrite');t.objectStore(STORE).clear();t.oncomplete=()=>{db.close();resolve()};t.onerror=()=>{db.close();reject(t.error)}})}
-function create(settings,onChange=()=>{}){
- const audio=new Audio();audio.preload='none';audio.loop=false;
+function create(settings,onChange=()=>{},onIssue=()=>{}){
+ const audio=new Audio();audio.preload='auto';audio.loop=false;
  let local=[],catalog=[],playing=false,usingAmbient=false,nowPlaying='',currentKey='',lastByPhase={},scene='inicio',phaseName='inicio',objectUrl=null,context=null,ambientTick=null,ambientCounter=0,fadeTimer=null,changeToken=0,initialized=false,offlineCount=0;
  const volume=()=>Math.max(0,Math.min(1,Number(settings.musicVolume??35)/100));
  const notify=()=>{try{onChange({playing,nowPlaying,scene,source:settings.musicSource,localCount:local.length,githubCount:catalog.length,offlineCount,usingAmbient})}catch{}};
@@ -64,7 +64,18 @@ function create(settings,onChange=()=>{}){
   currentKey=track.path;nowPlaying=track.name;audio.volume=0;
   try{await audio.play();if(token!==changeToken){audio.pause();return}
    let n=0;fadeTimer=setInterval(()=>{n++;audio.volume=volume()*Math.min(1,n/12);if(n>=12)fadeCancel()},35);setPlaying(true);
-  }catch(e){if(token!==changeToken)return;startAmbient();notify()}
+  }catch(e){
+   if(token!==changeToken)return;
+   if(e?.name==='NotAllowedError'){
+    // El navegador todavía exige un gesto del usuario. No marcarlo como sonando.
+    stopPlayback();
+    onIssue('Pulsa el botón ♫ para activar la música en este navegador.');
+    return;
+   }
+   // Errores HTTP, formato no admitido o caché dañada: no dejar la app en silencio.
+   if(settings.musicSource==='default')onIssue('No se pudo cargar '+track.name+'. Comprueba music/base/ y la conexión.');
+   startAmbient();
+  }
  }
  function next(force=false){if(!playing&&!force)return;const list=choices();if(!list.length){startAmbient();return}
   const available=list.length>1?list.filter(t=>t.path!==lastByPhase[stage()]):list;
@@ -113,8 +124,9 @@ function create(settings,onChange=()=>{}){
    for(const track of DEFAULT_TRACKS){
     try{
      const req=new Request(track.url);if(await cache.match(req))continue;
-     const res=await fetch(req);if(res.ok&&res.headers.get('content-type')?.toLowerCase().includes('audio'))await cache.put(req,res.clone());
-     else if(res.ok&&!res.headers.get('content-type')?.includes('text/html'))await cache.put(req,res.clone());
+     const res=await fetch(req);
+     const type=(res.headers.get('content-type')||'').toLowerCase();
+     if(res.ok&&res.status===200&&!type.includes('text/html'))await cache.put(req,res.clone());
     }catch{} // No interrumpir el concurso cuando un MP3 aún no existe.
    }
    await offlineStatus();
@@ -122,7 +134,10 @@ function create(settings,onChange=()=>{}){
  }
  async function init(){if(initialized)return;initialized=true;local=await rowsFromStorage();await migrateLegacy();await reloadCatalog();await offlineStatus();notify();void cacheDefaultTracks()}
  audio.addEventListener('ended',()=>{if(playing&&!usingAmbient)next(true)});
- audio.addEventListener('error',()=>{if(playing&&!usingAmbient)startAmbient()});
+ audio.addEventListener('error',()=>{if(playing&&!usingAmbient){
+  if(settings.musicSource==='default')onIssue('No se pudo cargar la canción. Comprueba music/base/ y la conexión.');
+  startAmbient();
+ }});
  return {init,toggle,start,stop,skip,setScene,setSource,setVolume,importFiles,clearLocal,reloadCatalog,downloadAll,offlineStatus,getState:()=>({playing,nowPlaying,scene,source:settings.musicSource,localCount:local.length,githubCount:catalog.length,offlineCount,usingAmbient})};
 }
 window.LogosMusic={create,phaseOfPath};

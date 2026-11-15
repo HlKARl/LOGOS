@@ -21,7 +21,8 @@ let game=validateGame(fromStorage(KEY,null));
 let view='home',modalOpen=false,pendingResolve=false,timeInterval=null,soundContext=null,toastTimeout=null,modalReturnFocus=null;
 if(settings.musicSource==='archivo')settings.musicSource='local';
 if(settings.musicSource==='ambient')settings.musicSource='default';
-const music=window.LogosMusic.create(settings,updateMusicButton);
+if(!['default','github','local'].includes(settings.musicSource))settings.musicSource='default';
+const music=window.LogosMusic.create(settings,updateMusicButton,message=>toast(message));
 const audioApi={get ctx(){if(!soundContext){try{soundContext=new (window.AudioContext||window.webkitAudioContext)()}catch{}}if(soundContext&&soundContext.state==='suspended')soundContext.resume().catch(()=>{});return soundContext}};
 function validateGame(g){if(!g||!Number.isInteger(g.round)||g.round<1||g.round>15||!g.q||!byId.has(g.q.id)||!Array.isArray(g.q.order)||g.q.order.length!==4)return null;if(!MODES[g.mode])g.mode=g.timerSeconds===30?'medio':g.timerSeconds===15?'dificil':'facil';if(!Number.isFinite(g.timerSeconds))g.timerSeconds=MODES[g.mode].time;return g}
 function tierForRound(round){return Math.min(5,Math.ceil(round/3))}
@@ -176,7 +177,10 @@ function bind(){
  document.addEventListener('visibilitychange',()=>{if(document.hidden)stopTimer();else if(view==='game')startTimer()});
  window.addEventListener('pagehide',()=>{saveGame();stopTimer()});
  if('serviceWorker'in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){
-  navigator.serviceWorker.register('./sw.js').catch(()=>{});
+  navigator.serviceWorker.register('./sw.js?v=3.5.0',{updateViaCache:'none'}).then(reg=>{
+   // Comprobar actualizaciones en siguientes visitas, sin borrar los datos del usuario.
+   if(navigator.onLine)reg.update().catch(()=>{});
+  }).catch(()=>{});
  }
  const badge=$('offlineBadge');if(location.protocol==='file:'){badge.classList.add('not-installed');$('connectionText').textContent='MODO LOCAL · OFFLINE'}
 }
