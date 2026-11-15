@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#080e20" />
+  <meta name="description" content="LOGOS: concurso bíblico de 15 rondas, 660 preguntas y tres comodines. Juega sin conexión." />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="application-name" content="LOGOS" />
+  <link rel="icon" type="image/svg+xml" href="icons/logos.svg" />
+  <link rel="apple-touch-icon" href="icons/logos-192.png" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="stylesheet" href="styles.css" />
+  <title>LOGOS · El gran desafío bíblico</title>
+</head>
+<body>
+<div class="ambient-scene" aria-hidden="true"><div class="ambient-glow one"></div><div class="ambient-glow two"></div><div class="orbit orbit-a"></div><div class="orbit orbit-b"></div></div>
+<div class="app-shell">
+  <header class="topbar">
+    <button class="brand" id="brandBtn" aria-label="LOGOS, ir al inicio"><span class="brand-mark" aria-hidden="true">✦</span><span class="brand-title">LOGOS<span class="brand-dot">.</span></span></button>
+    <div class="top-actions">
+      <span id="offlineBadge" class="status-pill"><span class="status-dot"></span><span id="connectionText">LISTO SIN INTERNET</span></span>
+      <button id="musicBtn" class="icon-button music-button" title="Activar o pausar música" aria-label="Activar o pausar música" aria-pressed="false">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+      </button>
+      <button id="settingsBtn" class="icon-button" title="Configuración" aria-label="Configuración"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.8 1.8 0 0 0 .36 1.99l.05.05-2.1 2.1-.05-.05a1.8 1.8 0 0 0-2-.36l-.07.03a1.8 1.8 0 0 0-1.14 1.66V21h-3v-.08a1.8 1.8 0 0 0-1.14-1.66l-.07-.03a1.8 1.8 0 0 0-2 .36l-.05.05-2.1-2.1.05-.05A1.8 1.8 0 0 0 6.6 15l-.03-.07a1.8 1.8 0 0 0-1.66-1.14H4.8v-3h.1a1.8 1.8 0 0 0 1.67-1.14L6.6 9a1.8 1.8 0 0 0-.36-2l-.05-.05 2.1-2.1.05.05a1.8 1.8 0 0 0 2 .36l.07-.03A1.8 1.8 0 0 0 11.55 3.6V3h3v.6a1.8 1.8 0 0 0 1.14 1.66l.07.03a1.8 1.8 0 0 0 2-.36l.05-.05 2.1 2.1-.05.05A1.8 1.8 0 0 0 19.4 9l.03.07a1.8 1.8 0 0 0 1.66 1.14h.1v3h-.1a1.8 1.8 0 0 0-1.66 1.14z" transform="translate(-.8 0)"/></svg></button>
+    </div>
+  </header>
+
+  <main>
+    <section class="screen home-screen" id="homeScreen" aria-labelledby="homeHeading">
+      <div class="home-kicker"><span class="kicker-line"></span> UN CONCURSO. 66 LIBROS. INFINITAS OPORTUNIDADES DE APRENDER.</div>
+      <div class="hero-symbol" aria-hidden="true"><div class="hero-halo"></div><div class="hero-core"><svg viewBox="0 0 100 100" fill="none" class="hero-logo"><path d="M50 12L60.5 39.5L88 50L60.5 60.5L50 88L39.5 60.5L12 50L39.5 39.5L50 12Z" stroke="currentColor" stroke-width="1.5"/><path d="M50 29L55 45L71 50L55 55L50 71L45 55L29 50L45 45L50 29Z" fill="currentColor"/></svg></div></div>
+      <h1 id="homeHeading">Una pregunta puede<br/><em>cambiarlo todo.</em></h1>
+      <p class="hero-sub">Pon a prueba lo que sabes de la Biblia. Quince preguntas te separan de alcanzar el millón.</p>
+      <div class="hero-stats" aria-label="Características del concurso"><div><strong>660</strong><span>PREGUNTAS</span></div><span class="stat-divider"></span><div><strong>15</strong><span>RONDAS</span></div><span class="stat-divider"></span><div><strong>03</strong><span>COMODINES</span></div></div>
+      <div class="hero-actions">
+        <label class="name-label" for="playerInput">NOMBRE DEL PARTICIPANTE</label>
+        <input type="text" class="player-input" id="playerInput" maxlength="28" autocomplete="nickname" placeholder="Tu nombre" value="Participante" />
+        <button class="primary-button full" id="startBtn"><span>COMENZAR EL DESAFÍO</span><span aria-hidden="true">↗</span></button>
+        <button class="secondary-button full" id="resumeBtn" hidden>CONTINUAR PARTIDA GUARDADA →</button>
+      </div>
+      <div class="home-bottom"><button class="text-button" id="howBtn">¿CÓMO SE JUEGA?</button><span>·</span><button class="text-button" id="recordsBtn">MIS RESULTADOS</button><span>·</span><span class="version-caption">EDICIÓN BÍBLICA · v1.0</span></div>
+    </section>
+
+    <section class="screen game-screen" id="gameScreen" hidden aria-label="Concurso en curso">
+      <div class="game-heading">
+        <div class="game-meta"><span class="eyebrow">EL GRAN DESAFÍO BÍBLICO</span><span id="playerDisplay" class="participant-name">PARTICIPANTE</span></div>
+        <div class="game-right-meta"><span id="timerPill" class="timer-pill" hidden>◷ <b id="timerText">45</b>s</span><button class="outline-small" id="ladderToggle" aria-expanded="false" aria-controls="mobileLadder">PREMIOS <span aria-hidden="true">▤</span></button><button class="outline-small" id="leaveBtn">SALIR</button></div>
+      </div>
+      <div id="mobileLadder" class="mobile-ladder" hidden><div id="mobileLadderContent"></div></div>
+      <div class="game-layout">
+        <div class="play-column">
+          <div class="round-strip"><div><span id="roundLabel" class="eyebrow">PREGUNTA 01 DE 15</span><div id="roundPrize" class="round-prize">100 <span>PTS</span></div></div><div class="tier-wrap"><span class="eyebrow">NIVEL DE DIFICULTAD</span><strong id="tierLabel">INICIAL</strong></div></div>
+          <div class="progress-track" aria-label="Progreso del concurso"><span id="progressFill" class="progress-fill"></span></div>
+          <div class="question-card" id="questionCard"><div class="question-sparkle" aria-hidden="true">✦</div><span class="question-source" id="questionBook">GÉNESIS · ANTIGUO TESTAMENTO</span><h2 id="questionText">¿Listo para empezar?</h2><span id="questionReference" class="question-reference" hidden></span></div>
+          <div id="answerGrid" class="answer-grid" role="group" aria-label="Opciones de respuesta"></div>
+          <div id="feedbackBar" class="feedback-bar" role="status" aria-live="polite"><span class="feedback-icon">✦</span><span id="feedbackText">Selecciona una alternativa y confirma tu respuesta.</span></div>
+          <div class="game-footer"><div class="reward-note"><span class="eyebrow">PREMIO ASEGURADO</span><strong id="safetyDisplay">0 PTS</strong></div><button class="primary-button confirm-button" id="confirmBtn" disabled>CONFIRMAR RESPUESTA <span aria-hidden="true">↗</span></button></div>
+          <div class="lifeline-section"><div class="lifeline-header"><span class="eyebrow">TUS COMODINES</span><span class="subtle-hint">Puedes combinarlos en una misma pregunta</span></div><div class="lifeline-row"><button id="fiftyBtn" class="lifeline" title="Eliminar dos respuestas incorrectas"><span class="lifeline-glyph">½</span><span class="lifeline-name">50 / 50</span><span class="lifeline-info">DOS OPCIONES</span></button><button id="swapBtn" class="lifeline" title="Cambiar a otra pregunta de la misma dificultad"><span class="lifeline-glyph">⇄</span><span class="lifeline-name">CAMBIAR</span><span class="lifeline-info">MISMO NIVEL</span></button><button id="doubleBtn" class="lifeline" title="Responder dos veces si fallas"><span class="lifeline-glyph">×2</span><span class="lifeline-name">DOBLE</span><span class="lifeline-info">2 INTENTOS</span></button></div></div>
+        </div>
+        <aside class="ladder-panel" aria-label="Escalera de premios"><div class="ladder-heading"><span class="eyebrow">LA RUTA AL MILLÓN</span><span class="ladder-diamond">✧</span></div><div id="prizeLadder" class="prize-ladder"></div><div class="ladder-foot"><span>✦</span> DOS METAS ASEGURADAS</div></aside>
+      </div>
+    </section>
+
+    <section class="screen result-screen" id="resultScreen" hidden aria-live="polite"><div id="resultIcon" class="result-icon">✦</div><span class="eyebrow" id="resultEyebrow">EL CONCURSO HA TERMINADO</span><h1 id="resultTitle">¡Buen intento!</h1><p id="resultSubtitle" class="result-subtitle"></p><div class="result-prize"><span>PREMIO FINAL</span><strong id="resultScore">0</strong><small>PUNTOS</small></div><div id="resultDetails" class="result-details"></div><button id="playAgainBtn" class="primary-button result-again">JUGAR OTRA VEZ <span aria-hidden="true">↗</span></button><button id="resultHomeBtn" class="text-button">VOLVER AL INICIO</button></section>
+  </main>
+  <footer class="app-footer"><span>LOGOS · SABIDURÍA EN CADA PREGUNTA</span><span id="footerInfo">JUEGA A TU RITMO · SIN CONEXIÓN</span></footer>
+</div>
+
+<div id="modalBackdrop" class="modal-backdrop" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-heading"><div><span class="eyebrow">LOGOS</span><h2 id="modalTitle">Configuración</h2></div><button id="modalClose" class="icon-button" aria-label="Cerrar ventana">✕</button></div><div id="modalBody" class="modal-body"></div><div id="modalActions" class="modal-actions"></div></div>
+</div>
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+<script src="questions.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
