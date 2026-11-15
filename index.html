@@ -31,37 +31,43 @@
 
   <main>
     <section class="screen home-screen" id="homeScreen" aria-labelledby="homeHeading">
-      <div class="home-kicker"><span class="kicker-line"></span> UN CONCURSO. 66 LIBROS. INFINITAS OPORTUNIDADES DE APRENDER.</div>
-      <div class="hero-symbol" aria-hidden="true"><div class="hero-halo"></div><div class="hero-core"><svg viewBox="0 0 100 100" fill="none" class="hero-logo"><path d="M50 12L60.5 39.5L88 50L60.5 60.5L50 88L39.5 60.5L12 50L39.5 39.5L50 12Z" stroke="currentColor" stroke-width="1.5"/><path d="M50 29L55 45L71 50L55 55L50 71L45 55L29 50L45 45L50 29Z" fill="currentColor"/></svg></div></div>
-      <h1 id="homeHeading">Una pregunta puede<br/><em>cambiarlo todo.</em></h1>
-      <p class="hero-sub">Pon a prueba lo que sabes de la Biblia. Quince preguntas te separan de alcanzar el millón.</p>
-      <div class="hero-stats" aria-label="Características del concurso"><div><strong>660</strong><span>PREGUNTAS</span></div><span class="stat-divider"></span><div><strong>15</strong><span>RONDAS</span></div><span class="stat-divider"></span><div><strong>03</strong><span>COMODINES</span></div></div>
-      <div class="hero-actions">
-        <label class="name-label" for="playerInput">NOMBRE DEL PARTICIPANTE</label>
-        <input type="text" class="player-input" id="playerInput" maxlength="28" autocomplete="nickname" placeholder="Tu nombre" value="Participante" />
-        <button class="primary-button full" id="startBtn"><span>COMENZAR EL DESAFÍO</span><span aria-hidden="true">↗</span></button>
-        <button class="secondary-button full" id="resumeBtn" hidden>CONTINUAR PARTIDA GUARDADA →</button>
+      <div class="home-stage">
+        <div class="home-content">
+          <div class="adventure-tag"><span class="tag-star">✦</span> UNA AVENTURA A TRAVÉS DE LA PALABRA</div>
+          <h1 id="homeHeading">Cada respuesta<br/>abre un <em>camino.</em></h1>
+          <p class="hero-sub">Un viaje por los 66 libros de la Biblia. Quince desafíos. Una meta extraordinaria.</p>
+          <div class="hero-actions">
+            <label class="name-label" for="playerInput">¿QUIÉN COMIENZA ESTA AVENTURA?</label>
+            <input type="text" class="player-input" id="playerInput" maxlength="28" autocomplete="nickname" placeholder="Escribe tu nombre" value="Participante" />
+            <button class="primary-button full" id="startBtn"><span>EMPRENDER EL VIAJE</span><span class="btn-arrow" aria-hidden="true">→</span></button>
+            <button class="secondary-button full" id="resumeBtn" hidden>CONTINUAR MI AVENTURA ↗</button>
+            <div class="home-mode" id="homeModeText">✧ MODO FÁCIL · SIN LÍMITE DE TIEMPO</div>
+          </div>
+        </div>
+        <div class="home-art" aria-hidden="true"><div class="art-halo art-ring-1"></div><div class="art-halo art-ring-2"></div><div class="art-halo art-ring-3"></div><div class="art-gate"><div class="gate-ray"></div><div class="gate-sigil">✦</div><div class="gate-caption">LOGOS</div></div><div class="art-small-star star-one">✧</div><div class="art-small-star star-two">✧</div></div>
       </div>
-      <div class="home-bottom"><button class="text-button" id="howBtn">¿CÓMO SE JUEGA?</button><span>·</span><button class="text-button" id="recordsBtn">MIS RESULTADOS</button><span>·</span><span class="version-caption">EDICIÓN BÍBLICA · v2.0</span></div>
+      <div class="home-lower"><div class="quest-marks"><span><strong>66</strong> LIBROS</span><i></i><span><strong>660</strong> PREGUNTAS</span><i></i><span><strong>15</strong> ETAPAS</span></div><div class="home-bottom"><button class="text-button" id="howBtn">CÓMO SE JUEGA</button><span>·</span><button class="text-button" id="recordsBtn">MIS LOGROS</button><span>·</span><button class="text-button" id="homeSettingsBtn">ELEGIR DIFICULTAD ↗</button></div></div>
     </section>
 
     <section class="screen game-screen" id="gameScreen" hidden aria-label="Concurso en curso">
       <div class="game-heading">
-        <div class="game-meta"><span class="eyebrow">EL GRAN DESAFÍO BÍBLICO</span><span id="playerDisplay" class="participant-name">PARTICIPANTE</span></div>
-        <div class="game-right-meta"><span id="timerPill" class="timer-pill" hidden>◷ <b id="timerText">45</b>s</span><button class="outline-small" id="ladderToggle" aria-expanded="false" aria-controls="mobileLadder">PREMIOS <span aria-hidden="true">▤</span></button><button class="outline-small" id="leaveBtn">SALIR</button></div>
+        <div class="game-meta"><span id="playerDisplay" class="participant-name">PARTICIPANTE</span><span id="gameModeLabel" class="mode-chip">FÁCIL</span></div>
+        <div class="game-right-meta"><span id="timerPill" class="timer-pill" hidden>◷ <b id="timerText">30</b>s</span><button class="outline-small" id="ladderToggle" aria-expanded="false" aria-controls="mobileLadder">PREMIOS <span aria-hidden="true">▤</span></button><button class="outline-small" id="leaveBtn">SALIR</button></div>
       </div>
       <div id="mobileLadder" class="mobile-ladder" hidden><div id="mobileLadderContent"></div></div>
       <div class="game-layout">
         <div class="play-column">
-          <div class="round-strip"><div><span id="roundLabel" class="eyebrow">PREGUNTA 01 DE 15</span><div id="roundPrize" class="round-prize">100 <span>PTS</span></div></div><div class="tier-wrap"><span class="eyebrow">NIVEL DE DIFICULTAD</span><strong id="tierLabel">INICIAL</strong></div></div>
+          <div class="round-strip"><div class="round-heading"><span id="roundLabel" class="eyebrow">PREGUNTA 01 DE 15</span><div id="roundPrize" class="round-prize">100 <span>PTS</span></div></div><div class="tier-wrap"><span class="eyebrow">ETAPA ACTUAL</span><strong id="tierLabel">INICIAL</strong></div></div>
           <div class="progress-track" aria-label="Progreso del concurso"><span id="progressFill" class="progress-fill"></span></div>
           <div class="question-card" id="questionCard"><div class="question-sparkle" aria-hidden="true">✦</div><span class="question-source" id="questionBook">GÉNESIS · ANTIGUO TESTAMENTO</span><h2 id="questionText">¿Listo para empezar?</h2><span id="questionReference" class="question-reference" hidden></span></div>
           <div id="answerGrid" class="answer-grid" role="group" aria-label="Opciones de respuesta"></div>
-          <div id="feedbackBar" class="feedback-bar" role="status" aria-live="polite"><span class="feedback-icon">✦</span><span id="feedbackText">Selecciona una alternativa y confirma tu respuesta.</span></div>
-          <div class="game-footer"><div class="reward-note"><span class="eyebrow">PREMIO ASEGURADO</span><strong id="safetyDisplay">0 PTS</strong></div><button class="primary-button confirm-button" id="confirmBtn" disabled>CONFIRMAR RESPUESTA <span aria-hidden="true">↗</span></button></div>
-          <div class="lifeline-section"><div class="lifeline-header"><span class="eyebrow">TUS COMODINES</span><span class="subtle-hint">Puedes combinarlos en una misma pregunta</span></div><div class="lifeline-row"><button id="fiftyBtn" class="lifeline" title="Eliminar dos respuestas incorrectas"><span class="lifeline-glyph">½</span><span class="lifeline-name">50 / 50</span><span class="lifeline-info">DOS OPCIONES</span></button><button id="swapBtn" class="lifeline" title="Cambiar a otra pregunta de la misma dificultad"><span class="lifeline-glyph">⇄</span><span class="lifeline-name">CAMBIAR</span><span class="lifeline-info">MISMO NIVEL</span></button><button id="doubleBtn" class="lifeline" title="Responder dos veces si fallas"><span class="lifeline-glyph">×2</span><span class="lifeline-name">DOBLE</span><span class="lifeline-info">2 INTENTOS</span></button></div></div>
+          <div id="feedbackBar" class="feedback-bar" role="status" aria-live="polite"><span class="feedback-icon">✦</span><span id="feedbackText">Elige tu respuesta para continuar.</span></div>
+          <div class="control-deck">
+            <div class="lifeline-section"><div class="lifeline-header"><span class="eyebrow" id="lifelineHeading">TUS COMODINES</span></div><div class="lifeline-row"><button id="fiftyBtn" class="lifeline" title="Eliminar dos respuestas incorrectas"><span class="lifeline-glyph">½</span><span class="lifeline-name">50/50</span></button><button id="swapBtn" class="lifeline" title="Cambiar a otra pregunta de la misma dificultad"><span class="lifeline-glyph">⇄</span><span class="lifeline-name">CAMBIAR</span></button><button id="doubleBtn" class="lifeline" title="Responder dos veces si fallas"><span class="lifeline-glyph">×2</span><span class="lifeline-name">DOBLE</span></button></div></div>
+            <div class="game-footer"><div class="reward-note"><span class="eyebrow">ASEGURADO</span><strong id="safetyDisplay">0 PTS</strong></div><button class="primary-button confirm-button" id="confirmBtn" disabled>CONFIRMAR <span aria-hidden="true">↗</span></button></div>
+          </div>
         </div>
-        <aside class="ladder-panel" aria-label="Escalera de premios"><div class="ladder-heading"><span class="eyebrow">LA RUTA AL MILLÓN</span><span class="ladder-diamond">✧</span></div><div id="prizeLadder" class="prize-ladder"></div><div class="ladder-foot"><span>✦</span> DOS METAS ASEGURADAS</div></aside>
+        <aside class="ladder-panel" aria-label="Escalera de premios"><div class="ladder-heading"><span class="eyebrow">TU CAMINO AL MILLÓN</span><span class="ladder-diamond">✧</span></div><div id="prizeLadder" class="prize-ladder"></div><div class="ladder-foot"><span>✦</span> DOS METAS ASEGURADAS</div></aside>
       </div>
     </section>
 

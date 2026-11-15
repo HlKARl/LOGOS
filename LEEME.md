@@ -1,67 +1,75 @@
-# LOGOS 2.0 · concurso bíblico offline
+# LOGOS 3.0 · Concurso bíblico offline
 
-**660 preguntas, 66 libros, 15 rondas, 3 comodines combinables.**
+**660 preguntas · 66 libros de la Biblia · 15 rondas · 4 modos · música híbrida.**
 
-## Cómo actualizar la aplicación en GitHub Pages
+## Actualización en GitHub Pages
 
-1. Descomprime `Logos_PWA_Offline_v2.zip`.
-2. Sube **el contenido** del ZIP (incluidas las carpetas `music` e `icons`) a la raíz de tu repositorio en GitHub. Sobrescribe los archivos antiguos.
-3. Comprueba en **Settings → Pages** que se publica desde `main` y `/(root)`.
-4. Abre la URL publicada, actualiza. Si ves todavía la versión antigua, cierra/reabre la PWA o recarga tras la actualización del Service Worker.
+1. Descomprime `Logos_PWA_Offline_v3.zip`.
+2. Copia **el contenido** del ZIP a la raíz de tu repositorio publicado, reemplazando `index.html`, `app.js`, `styles.css`, `sw.js`, `manifest.webmanifest` y los archivos que hayan cambiado. No subas el ZIP sin descomprimir.
+3. **Conserva tus archivos MP3 y tu `music/catalog.json` actual** si ya habías personalizado la biblioteca. El catálogo del ZIP está vacío y no debes sobrescribir el personalizado.
+4. GitHub Pages: `Settings → Pages → Deploy from a branch → main → /(root)`.
+5. Una vez publicada la versión, vuelve a cargar la página; si la aplicación instalada muestra la anterior, ciérrala y vuelve a abrirla o recarga la página para que se active el nuevo Service Worker. No necesitas reinstalarla.
 
-**Conserva la carpeta `music/` al actualizar**: si ya tienes canciones ahí, no las borres. Solo reemplaza archivos del programa; conserva el contenido de `music/catalog.json` que hayas personalizado.
+## Pantallas rediseñadas
 
-## Sin desplazarse durante el concurso
+- **Inicio:** presentación de aventura con un portal luminoso, identidad simple, nombre del concursante, botón principal y accesos al desafío y resultados.
+- **Concurso:** composición reorganizada con pregunta destacada, respuestas 2×2, barra de progreso, comodines y botón de confirmación. La escalera de premios se ve a la derecha en escritorio y se abre en una capa superpuesta en móvil.
+- Se ha probado en resoluciones de **320×568, 360×640, 390×844, 412×915, 800×600, 1280×800 y 1440×900** sin desplazamiento vertical en el concurso. Las opciones de configuración sí tienen desplazamiento interno si la pantalla es pequeña.
 
-La pantalla principal, respuestas, tres comodines y botón de confirmar están integrados en **una sola pantalla** en móvil y PC. El panel de premios en móvil se abre como superposición; la ventana de Configuración puede desplazarse porque contiene todas las opciones. En dispositivos extremadamente pequeños, la legibilidad depende de la resolución disponible.
+## Configuración → Partida
 
-## Fuentes de música (Configuración → Origen musical)
+| Modo | Tiempo por pregunta | Comodines |
+| --- | --- | --- |
+| **Fácil** | Sin límite | Sí |
+| **Medio** | 30 segundos | Sí |
+| **Difícil** | 15 segundos | Sí |
+| **Sagrado** | 15 segundos | **No** |
 
-**1. Instrumental LOGOS:** se genera sin archivos mediante Web Audio; cambia la atmósfera en las rondas 1–5 (suave), 6–10 (media) y 11–15 (intensa). La música está desactivada hasta que pulses la nota musical.
+El modo se elige antes de iniciar una partida; al cambiar el modo durante una partida guardada, se aplicará a la **próxima**, no al concurso en curso. La dificultad de las preguntas continúa aumentando por ronda en todos los modos. Los tres comodines siguen combinables salvo en Sagrado. En Partida también se activan o desactivan los efectos de sonido.
 
-**2. Mi música del celular/PC:** usa «IMPORTAR CARPETA» para elegir una carpeta con subcarpetas. Si tu navegador móvil no admite esa opción, usa «ELEGIR CANCIONES» para seleccionar varios archivos. Se guardan copias en el almacenamiento local del navegador (IndexedDB), sujetas al espacio disponible. **Las carpetas web no pueden vigilarse automáticamente**: al añadir archivos a tu celular, deberás importarlos nuevamente. Para asignar canciones a etapas, puedes elegir **«Usar canciones en»** antes de importarlas, o crear subcarpetas llamadas `inicio`, `suave`, `media`, `intensa`, `victoria` y dejar seleccionada la opción automática. Con una carpeta plana y asignación automática se utiliza la misma lista durante las preguntas. Los nombres de carpeta solo se reconocen si el selector incluye las rutas.
+## Configuración → Música
 
-**3. Música de GitHub:** pon los archivos en estas subcarpetas (ya creadas en el ZIP):
+**Instrumental:** ambiente sintetizado en la app, disponible offline, con intensidad creciente según la ronda.
 
-```
+**Mi dispositivo:** selecciona música desde el celular o PC mediante `+ CARPETA` o `+ CANCIONES`. Las canciones se copian al almacenamiento local del navegador (IndexedDB). Puedes asignarlas a una etapa al importarlas, o usar subcarpetas `inicio`, `suave`, `media`, `intensa` y `victoria`. Si Android/tu navegador no permite elegir carpetas completas, usa el selector de varias canciones. La aplicación **no lee automáticamente cambios posteriores** en tu carpeta: debes importar las canciones nuevas.
+
+**GitHub:** conserva o rellena estas carpetas:
+
+```text
 music/
-├── inicio/                 ← menú principal
+├── inicio/                (pantalla principal)
 ├── juego/
-│   ├── suave/             ← preguntas 1–5
-│   ├── media/             ← preguntas 6–10
-│   └── intensa/           ← preguntas 11–15
-├── victoria/              ← si ganas la ronda 15
-└── catalog.json            ← nombres de los audios
+│   ├── suave/            (rondas 1–5)
+│   ├── media/            (rondas 6–10)
+│   └── intensa/          (rondas 11–15)
+├── victoria/             (victoria final)
+└── catalog.json          (lista de archivos)
 ```
 
-**IMPORTANTE:** GitHub Pages no ofrece un índice automático de carpetas. Después de subir las canciones, abre `music/catalog.json` y agrega sus nombres **exactos**, por ejemplo:
+El repositorio **no** genera listas automáticas de música. Cada pista debe aparecer en `music/catalog.json`:
 
 ```json
 {
-  "inicio": ["inicio/intro.mp3", "inicio/otra.mp3"],
-  "suave": ["juego/suave/paz.mp3"],
-  "media": ["juego/media/suspenso.mp3"],
+  "inicio": ["inicio/bienvenida.mp3"],
+  "suave": ["juego/suave/ambiente1.mp3", "juego/suave/ambiente2.mp3"],
+  "media": ["juego/media/tension.mp3"],
   "intensa": ["juego/intensa/final.mp3"],
   "victoria": ["victoria/celebracion.mp3"]
 }
 ```
 
-El reproductor alterna pistas sin repetir la última en la misma etapa. Si una categoría está vacía usa la instrumental original en esa etapa. Conviene evitar espacios y tildes en los nombres de archivos; si los usas, deben coincidir exactamente con el catálogo.
+Usa los nombres exactos de los archivos y evita espacios y tildes si es posible. Puedes poner varias pistas por categoría. En la PWA publicada, pulsa **Descargar para jugar offline** en la pestaña de música mientras estás conectado; así se guardarán en caché. Vuelve a hacerlo cuando agregues pistas. La música requiere que pulses el botón con la nota musical (los navegadores restringen la reproducción automática).
 
-**Música offline de GitHub:** estando conectado, entra a Configuración y pulsa «DESCARGAR MÚSICA DE GITHUB PARA OFFLINE». El programa guardará las canciones configuradas en Cache Storage, disponibles sin internet para esta instalación. Repite la descarga cuando agregues o modifiques canciones. No elimines los datos del sitio o la caché si deseas conservarlas. Las pistas que se reproduzcan con conexión también quedan almacenadas en caché.
+## Archivo único: Logos_Offline_v3.html
 
-El volumen, la fuente musical y el tiempo por pregunta se guardan entre visitas. La música no se reproduce automáticamente por restricciones del navegador: primero pulsa el botón de nota musical.
+Puedes abrir este HTML directamente para jugar sin conexión. Incluye preguntas, estilos y música sintetizada. La importación de pistas locales puede depender del navegador y sus permisos. Para utilizar la biblioteca de música alojada en GitHub necesitas la **PWA publicada**: desde `file://` no se puede confiar en que el navegador permita acceder a `music/catalog.json`.
 
-## Archivo HTML independiente
+## Reglas que se conservan
 
-`Logos_Offline_v2.html` funciona sin internet y contiene el juego completo, la música sintetizada y el selector de canciones locales. **La opción «GitHub» requiere la PWA publicada** para poder descargar la carpeta `music/` mediante HTTP(S); en un archivo `file://` no suele ser posible acceder a ese catálogo. Para canciones locales persistentes, se recomienda la PWA instalada.
+- 660 preguntas disponibles offline, todas de respuesta múltiple con cuatro opciones.
+- Premios ficticios de 100 a 1.000.000 de puntos en 15 rondas, metas garantizadas en 5 (1.000) y 10 (32.000).
+- Comodines 50/50, cambio de pregunta de la misma dificultad y doble oportunidad. Cada uno se usa como máximo una vez por partida (salvo Sagrado).
+- Opción de plantarse; historial local de resultados; partidas guardadas automáticamente.
+- Sin APIs de terceros para el juego; después de la primera carga de GitHub Pages, la PWA funciona sin internet.
 
-## Características que se conservan
-
-- Escalera de 15 premios hasta un millón de puntos ficticios (sin dinero real).
-- Premios asegurados de 1.000 en la pregunta 5 y de 32.000 en la 10.
-- 50/50, cambiar pregunta en la misma dificultad, doble oportunidad; **todos combinables** una vez por concurso.
-- Guardado automático de partida y récords, selección A–D con teclado, tiempo por pregunta opcional.
-- 660 preguntas en `questions.js`, sin APIs externas, guardadas en caché para jugar offline después de la primera visita.
-
-**Nota:** utiliza música que tengas derecho a compartir. En un repositorio público de GitHub, el audio publicado es accesible a otras personas.
+**Privacidad:** la música que importas del dispositivo queda almacenada localmente. Las canciones que subes a GitHub en un repositorio público se vuelven accesibles a otros; comparte solo música que puedas publicar legalmente.
