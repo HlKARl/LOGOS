@@ -24,6 +24,7 @@
       <button id="musicBtn" class="icon-button music-button" title="Activar o pausar música" aria-label="Activar o pausar música" aria-pressed="false">
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
       </button>
+      <button id="nextTrackBtn" class="icon-button next-track" title="Siguiente canción" aria-label="Siguiente canción" hidden>⏭</button>
       <button id="settingsBtn" class="icon-button" title="Configuración" aria-label="Configuración"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.8 1.8 0 0 0 .36 1.99l.05.05-2.1 2.1-.05-.05a1.8 1.8 0 0 0-2-.36l-.07.03a1.8 1.8 0 0 0-1.14 1.66V21h-3v-.08a1.8 1.8 0 0 0-1.14-1.66l-.07-.03a1.8 1.8 0 0 0-2 .36l-.05.05-2.1-2.1.05-.05A1.8 1.8 0 0 0 6.6 15l-.03-.07a1.8 1.8 0 0 0-1.66-1.14H4.8v-3h.1a1.8 1.8 0 0 0 1.67-1.14L6.6 9a1.8 1.8 0 0 0-.36-2l-.05-.05 2.1-2.1.05.05a1.8 1.8 0 0 0 2 .36l.07-.03A1.8 1.8 0 0 0 11.55 3.6V3h3v.6a1.8 1.8 0 0 0 1.14 1.66l.07.03a1.8 1.8 0 0 0 2-.36l.05-.05 2.1 2.1-.05.05A1.8 1.8 0 0 0 19.4 9l.03.07a1.8 1.8 0 0 0 1.66 1.14h.1v3h-.1a1.8 1.8 0 0 0-1.66 1.14z" transform="translate(-.8 0)"/></svg></button>
     </div>
   </header>
@@ -41,7 +42,7 @@
         <button class="primary-button full" id="startBtn"><span>COMENZAR EL DESAFÍO</span><span aria-hidden="true">↗</span></button>
         <button class="secondary-button full" id="resumeBtn" hidden>CONTINUAR PARTIDA GUARDADA →</button>
       </div>
-      <div class="home-bottom"><button class="text-button" id="howBtn">¿CÓMO SE JUEGA?</button><span>·</span><button class="text-button" id="recordsBtn">MIS RESULTADOS</button><span>·</span><span class="version-caption">EDICIÓN BÍBLICA · v1.0</span></div>
+      <div class="home-bottom"><button class="text-button" id="howBtn">¿CÓMO SE JUEGA?</button><span>·</span><button class="text-button" id="recordsBtn">MIS RESULTADOS</button><span>·</span><span class="version-caption">EDICIÓN BÍBLICA · v2.0</span></div>
     </section>
 
     <section class="screen game-screen" id="gameScreen" hidden aria-label="Concurso en curso">
@@ -66,7 +67,7 @@
 
     <section class="screen result-screen" id="resultScreen" hidden aria-live="polite"><div id="resultIcon" class="result-icon">✦</div><span class="eyebrow" id="resultEyebrow">EL CONCURSO HA TERMINADO</span><h1 id="resultTitle">¡Buen intento!</h1><p id="resultSubtitle" class="result-subtitle"></p><div class="result-prize"><span>PREMIO FINAL</span><strong id="resultScore">0</strong><small>PUNTOS</small></div><div id="resultDetails" class="result-details"></div><button id="playAgainBtn" class="primary-button result-again">JUGAR OTRA VEZ <span aria-hidden="true">↗</span></button><button id="resultHomeBtn" class="text-button">VOLVER AL INICIO</button></section>
   </main>
-  <footer class="app-footer"><span>LOGOS · SABIDURÍA EN CADA PREGUNTA</span><span id="footerInfo">JUEGA A TU RITMO · SIN CONEXIÓN</span></footer>
+  <footer class="app-footer"><span>LOGOS · SABIDURÍA EN CADA PREGUNTA</span><span id="musicInfo">JUEGA A TU RITMO · SIN CONEXIÓN</span></footer>
 </div>
 
 <div id="modalBackdrop" class="modal-backdrop" hidden>
@@ -74,6 +75,7 @@
 </div>
 <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
 <script src="questions.js"></script>
+<script src="music.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

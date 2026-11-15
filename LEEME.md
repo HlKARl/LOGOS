@@ -1,61 +1,67 @@
-# LOGOS — El gran desafío bíblico
+# LOGOS 2.0 · concurso bíblico offline
 
-**Versión 1.0 · concurso para un participante · 660 preguntas / 66 libros**
+**660 preguntas, 66 libros, 15 rondas, 3 comodines combinables.**
 
-LOGOS está inspirado en la mecánica de concursos de preguntas con escalera de premios, pero utiliza una identidad visual, efectos y música instrumental propios. **No entrega dinero real.**
+## Cómo actualizar la aplicación en GitHub Pages
 
-## Dos formas de jugar
+1. Descomprime `Logos_PWA_Offline_v2.zip`.
+2. Sube **el contenido** del ZIP (incluidas las carpetas `music` e `icons`) a la raíz de tu repositorio en GitHub. Sobrescribe los archivos antiguos.
+3. Comprueba en **Settings → Pages** que se publica desde `main` y `/(root)`.
+4. Abre la URL publicada, actualiza. Si ves todavía la versión antigua, cierra/reabre la PWA o recarga tras la actualización del Service Worker.
 
-### A) Abrir inmediatamente, sin internet
+**Conserva la carpeta `music/` al actualizar**: si ya tienes canciones ahí, no las borres. Solo reemplaza archivos del programa; conserva el contenido de `music/catalog.json` que hayas personalizado.
 
-Utiliza el archivo **`Logos_Offline.html`** incluido por separado en la entrega. Haz doble clic (PC), o ábrelo con tu navegador (Android). El juego completo y las 660 preguntas están dentro de ese archivo. **No hace falta instalar nada ni conectarse.** Si el navegador impide abrir archivos HTML desde el administrador de archivos, usa el método PWA.
+## Sin desplazarse durante el concurso
 
-### B) Instalar como aplicación web (PWA)
+La pantalla principal, respuestas, tres comodines y botón de confirmar están integrados en **una sola pantalla** en móvil y PC. El panel de premios en móvil se abre como superposición; la ventana de Configuración puede desplazarse porque contiene todas las opciones. En dispositivos extremadamente pequeños, la legibilidad depende de la resolución disponible.
 
-1. Descomprime **`Logos_PWA_Offline.zip`**.
-2. Publica todos los archivos y la carpeta `icons` en una web con **HTTPS**, por ejemplo GitHub Pages.
-3. Abre la dirección publicada una primera vez **con internet**.
-4. En Chrome/Brave, usa **Instalar aplicación** o **Añadir a la pantalla de inicio**.
-5. Cuando termine la instalación y la carga inicial, podrás abrirla y jugar **sin internet**. La música interna, preguntas, estilos e iconos se guardan en la caché local.
+## Fuentes de música (Configuración → Origen musical)
 
-> En una PC también puedes abrir el `index.html` de la carpeta descomprimida para jugar offline; sin embargo, la instalación como PWA desde `file://` no funciona. Se requiere HTTPS o `localhost`.
+**1. Instrumental LOGOS:** se genera sin archivos mediante Web Audio; cambia la atmósfera en las rondas 1–5 (suave), 6–10 (media) y 11–15 (intensa). La música está desactivada hasta que pulses la nota musical.
 
-## Reglas
+**2. Mi música del celular/PC:** usa «IMPORTAR CARPETA» para elegir una carpeta con subcarpetas. Si tu navegador móvil no admite esa opción, usa «ELEGIR CANCIONES» para seleccionar varios archivos. Se guardan copias en el almacenamiento local del navegador (IndexedDB), sujetas al espacio disponible. **Las carpetas web no pueden vigilarse automáticamente**: al añadir archivos a tu celular, deberás importarlos nuevamente. Para asignar canciones a etapas, puedes elegir **«Usar canciones en»** antes de importarlas, o crear subcarpetas llamadas `inicio`, `suave`, `media`, `intensa`, `victoria` y dejar seleccionada la opción automática. Con una carpeta plana y asignación automática se utiliza la misma lista durante las preguntas. Los nombres de carpeta solo se reconocen si el selector incluye las rutas.
 
-- 15 rondas, dificultad creciente (cinco niveles, tres rondas por nivel).
-- La escalera termina en **1.000.000 de puntos ficticios**.
-- Al acertar la pregunta **5**, aseguras **1.000 puntos**; al acertar la **10**, aseguras **32.000 puntos**.
-- Puedes **plantarte** antes de responder y conservar **todo lo ganado hasta la última pregunta acertada**. Si fallas, conservas solo el último premio asegurado.
-- Debes **seleccionar una opción** y después **confirmar**; el juego revela la respuesta correcta junto con su referencia bíblica.
-- Los tres comodines pueden combinarse, una vez cada uno por partida:
-  - **50/50**: elimina dos opciones equivocadas (o las necesarias para dejar la correcta y una alternativa si ya hubo un intento fallido).
-  - **Cambiar**: reemplaza la pregunta con otra del **mismo nivel de dificultad**. Nunca repite la que cambiaste.
-  - **Doble**: te da un segundo intento si fallas el primero.
-- Si aplicas 50/50 o Doble antes de cambiar la pregunta, **esos efectos se mantienen** sobre la pregunta nueva. Al cambiar se reinicia el conteo de intentos.
-- El **reloj está desactivado por defecto**. Puedes activarlo en Configuración (30, 45, 60 o 90 segundos por pregunta). El cambio se aplica desde la siguiente pregunta.
+**3. Música de GitHub:** pon los archivos en estas subcarpetas (ya creadas en el ZIP):
 
-## Música
+```
+music/
+├── inicio/                 ← menú principal
+├── juego/
+│   ├── suave/             ← preguntas 1–5
+│   ├── media/             ← preguntas 6–10
+│   └── intensa/           ← preguntas 11–15
+├── victoria/              ← si ganas la ronda 15
+└── catalog.json            ← nombres de los audios
+```
 
-- Pulsa el **icono de nota musical** para iniciar/pausar una base instrumental LOGOS, generada en el navegador sin internet.
-- En **Configuración**, selecciona **Mi canción** y carga MP3, WAV u otro formato compatible del dispositivo. El archivo nunca se envía a un servidor.
-- Con **Guardar mi canción para escucharla offline** activado, intenta guardar una copia local mediante IndexedDB (hasta 45 MB, sujeto al espacio disponible y permisos del navegador). Si no puede guardarla, aún puedes escucharla durante esa sesión.
-- Puedes ajustar el volumen y activar/desactivar efectos del concurso. Los navegadores requieren una interacción del usuario para comenzar a reproducir sonido.
+**IMPORTANTE:** GitHub Pages no ofrece un índice automático de carpetas. Después de subir las canciones, abre `music/catalog.json` y agrega sus nombres **exactos**, por ejemplo:
 
-## Guardado y privacidad
+```json
+{
+  "inicio": ["inicio/intro.mp3", "inicio/otra.mp3"],
+  "suave": ["juego/suave/paz.mp3"],
+  "media": ["juego/media/suspenso.mp3"],
+  "intensa": ["juego/intensa/final.mp3"],
+  "victoria": ["victoria/celebracion.mp3"]
+}
+```
 
-- El progreso se guarda automáticamente en `localStorage` de este navegador.
-- Se guarda el nombre del participante, récords y últimas preguntas para evitar repeticiones cercanas.
-- Las preguntas y el audio elegido se mantienen en tu propio dispositivo; **no hay cuentas, anuncios, analíticas, servidores ni llamadas a servicios externos**.
-- Si borras los datos del sitio o cambias de origen (por ejemplo, del archivo local a GitHub Pages), el progreso no se sincroniza.
+El reproductor alterna pistas sin repetir la última en la misma etapa. Si una categoría está vacía usa la instrumental original en esa etapa. Conviene evitar espacios y tildes en los nombres de archivos; si los usas, deben coincidir exactamente con el catálogo.
 
-## Preguntas y dificultad
+**Música offline de GitHub:** estando conectado, entra a Configuración y pulsa «DESCARGAR MÚSICA DE GITHUB PARA OFFLINE». El programa guardará las canciones configuradas en Cache Storage, disponibles sin internet para esta instalación. Repite la descarga cuando agregues o modifiques canciones. No elimines los datos del sitio o la caché si deseas conservarlas. Las pistas que se reproduzcan con conexión también quedan almacenadas en caché.
 
-- Las **660 preguntas** fueron extraídas del documento Word del usuario, con cuatro alternativas, una respuesta correcta y referencias bíblicas.
-- La clasificación en cinco niveles de dificultad es **aproximada**, calculada a partir de la posición de la pregunta, la familiaridad del libro y su formulación. No equivale a una validación psicométrica.
-- El código fuente es transparente y editable: `questions.js` (contenido), `app.js` (reglas), `styles.css` (diseño), `index.html` (interfaz), `sw.js` (modo offline) y `manifest.webmanifest` (instalación).
+El volumen, la fuente musical y el tiempo por pregunta se guardan entre visitas. La música no se reproduce automáticamente por restricciones del navegador: primero pulsa el botón de nota musical.
 
-## Atajos de teclado
+## Archivo HTML independiente
 
-**A–D**: seleccionar respuesta · **Intro**: confirmar / siguiente · **Esc**: cerrar ventanas · **L**: desplegar los premios.
+`Logos_Offline_v2.html` funciona sin internet y contiene el juego completo, la música sintetizada y el selector de canciones locales. **La opción «GitHub» requiere la PWA publicada** para poder descargar la carpeta `music/` mediante HTTP(S); en un archivo `file://` no suele ser posible acceder a ese catálogo. Para canciones locales persistentes, se recomienda la PWA instalada.
 
-Diseñado para Android, PC, pantalla táctil y proyectores. El juego se usa localmente y no necesita servicios de terceros.
+## Características que se conservan
+
+- Escalera de 15 premios hasta un millón de puntos ficticios (sin dinero real).
+- Premios asegurados de 1.000 en la pregunta 5 y de 32.000 en la 10.
+- 50/50, cambiar pregunta en la misma dificultad, doble oportunidad; **todos combinables** una vez por concurso.
+- Guardado automático de partida y récords, selección A–D con teclado, tiempo por pregunta opcional.
+- 660 preguntas en `questions.js`, sin APIs externas, guardadas en caché para jugar offline después de la primera visita.
+
+**Nota:** utiliza música que tengas derecho a compartir. En un repositorio público de GitHub, el audio publicado es accesible a otras personas.
